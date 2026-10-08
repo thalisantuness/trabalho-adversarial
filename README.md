@@ -73,32 +73,32 @@ Modelemos a decisão central como um jogo estático de informação completa com
 
 ### 3.1 Espaço de Ações
 * **Jogador A (Cliente):**
-  * $A_1$ (*Íntegro*): Realiza compras normais e resgata brindes de forma proporcional à sua fidelidade real.
-  * $A_2$ (*Oportunista*): Explora brechas operacionais (devolução sem estorno ou divisão artificial de compras).
+  * **A₁ (Cliente Honesto / Íntegro):** Realiza compras normais e resgata brindes de forma proporcional à sua fidelidade real.
+  * **A₂ (Cliente Oportunista / Golpe da Devolução):** Explora brechas operacionais (devolução sem estorno ou divisão artificial de compras).
 * **Jogador B (Lojista):**
-  * $B_1$ (*Flexível / Baixo Atrito*): Gera pontuação ágil no caixa e aprova solicitações no aplicativo sem barreiras burocráticas.
-  * $B_2$ (*Defensivo / Rigoroso*): Impõe checagens manuais, atrasa aprovações e rejeita solicitações suspeitas no aplicativo.
+  * **B₁ (Lojista Flexível / Baixo Atrito):** Gera pontuação ágil no caixa e aprova solicitações no aplicativo sem barreiras burocráticas.
+  * **B₂ (Lojista Defensivo / Rigoroso):** Impõe checagens manuais, atrasa aprovações e rejeita solicitações suspeitas no aplicativo.
 
 ### 3.2 Matriz de Payoffs (Ordem de Preferência de 0 a 3)
 A ordem de preferência de cada participante é calibrada na escala de **3 (Melhor resultado possível)**, **2 (Bom)**, **1 (Ruim)** e **0 (Pior resultado possível)**.  
 O par de payoffs é dado por: `(Payoff do Cliente, Payoff do Lojista)`.
 
-| Jogador A (Cliente) \ Jogador B (Lojista) | $B_1$: Lojista Flexível (Ágil) | $B_2$: Lojista Defensivo (Fricção) |
+| Jogador A (Cliente) \ Jogador B (Lojista) | B₁: Lojista Flexível (Confiante / Ágil) | B₂: Lojista Defensivo (Desconfiado / Rigoroso) |
 | :--- | :---: | :---: |
-| **$A_1$: Cliente Íntegro** | **(2, 3)** | **(1, 1)** |
-| **$A_2$: Cliente Oportunista** | **(3, 0)** | **(0, 2)** |
+| **A₁: Cliente Honesto** | **(2, 3)** | **(1, 1)** |
+| **A₂: Cliente Malandro (Golpe da Devolução)** | **(3, 0)** | **(0, 2)** |
 
 ### 3.3 Justificativa dos Payoffs e Análise Estratégica
-* **Resultado ($A_1, B_1$) = (2, 3):** O lojista atinge seu melhor cenário (3), pois fidelizou o cliente e manteve atendimento rápido no PDV. O cliente tem um bom ganho (2), pois pontuou e resgatou seu brinde de forma fluida.
-* **Resultado ($A_2, B_1$) = (3, 0):** O cliente oportunista atinge sua utilidade máxima (3), obtendo recompensas sem contrapartida de lucro para a loja. O lojista tem seu pior resultado (0), arcando com prejuízo de estoque.
-* **Resultado ($A_1, B_2$) = (1, 1):** O lojista burocratiza o processo e desconfia; o cliente honesto se frustra com a demora (1) e o lojista gasta tempo de atendimento arriscando perder o cliente (1).
-* **Resultado ($A_2, B_2$) = (0, 2):** A tentativa de exploração do cliente é frustrada e ele tem payoff zero (0). O lojista preserva seu estoque (2), embora tenha arcado com o custo operacional do atrito.
+* **Resultado (A₁, B₁) = (2, 3):** O lojista atinge seu melhor cenário (3), pois fidelizou o cliente e manteve atendimento rápido no PDV. O cliente tem um bom ganho (2), pois pontuou e resgatou seu brinde de forma fluida.
+* **Resultado (A₂, B₁) = (3, 0):** O cliente oportunista atinge sua utilidade máxima (3), obtendo recompensas sem contrapartida de lucro para a loja. O lojista tem seu pior resultado (0), arcando com prejuízo de estoque.
+* **Resultado (A₁, B₂) = (1, 1):** O lojista burocratiza o processo e desconfia; o cliente honesto se frustra com a demora (1) e o lojista gasta tempo de atendimento arriscando perder o cliente (1).
+* **Resultado (A₂, B₂) = (0, 2):** A tentativa de exploração do cliente é frustrada e ele tem payoff zero (0). O lojista preserva seu estoque (2), embora tenha arcado com o custo operacional do atrito.
 
 ### 3.4 Melhores Respostas e Equilíbrio de Nash
-* Se o Lojista jogar **Flexível ($B_1$)**: O Cliente compara $A_1$ (payoff 2) com $A_2$ (payoff 3). A melhor resposta do Cliente é jogar **Oportunista ($A_2$)**.
-* Se o Lojista jogar **Defensivo ($B_2$)**: O Cliente compara $A_1$ (payoff 1) com $A_2$ (payoff 0). A melhor resposta do Cliente é jogar **Íntegro ($A_1$)**.
-* Se o Cliente jogar **Íntegro ($A_1$)**: O Lojista compara $B_1$ (payoff 3) com $B_2$ (payoff 1). A melhor resposta do Lojista é jogar **Flexível ($B_1$)**.
-* Se o Cliente jogar **Oportunista ($A_2$)**: O Lojista compara $B_1$ (payoff 0) com $B_2$ (payoff 2). A melhor resposta do Lojista é jogar **Defensivo ($B_2$)**.
+* Se o Lojista for **Flexível (B₁)**: O Cliente compara A₁ (payoff 2) com A₂ (payoff 3). A melhor resposta do Cliente é jogar **Oportunista (A₂)**, pois nota 3 > 2.
+* Se o Lojista for **Defensivo (B₂)**: O Cliente compara A₁ (payoff 1) com A₂ (payoff 0). A melhor resposta do Cliente é jogar **Honesto (A₁)**, pois nota 1 > 0.
+* Se o Cliente for **Honesto (A₁)**: O Lojista compara B₁ (payoff 3) com B₂ (payoff 1). A melhor resposta do Lojista é jogar **Flexível (B₁)**, pois nota 3 > 1.
+* Se o Cliente for **Oportunista (A₂)**: O Lojista compara B₁ (payoff 0) com B₂ (payoff 2). A melhor resposta do Lojista é jogar **Defensivo (B₂)**, pois nota 2 > 0.
 
 > [!IMPORTANT]
 > **Conclusão:** **Não existe estratégia dominante** para nenhum dos dois jogadores e **não há Equilíbrio de Nash em estratégias puras**. O sistema é inerentemente instável: a facilidade atrai a exploração; a exploração força a defesa; a defesa sufoca o cliente honesto; a busca por clientes honestos força a reabertura de facilidades.
