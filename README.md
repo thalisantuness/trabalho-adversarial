@@ -18,7 +18,7 @@ Em conformidade com a exigência de não analisar um domínio genérico, este tr
 
 ### 1.2 Por que o caso representa uma situação adversarial?
 A situação **não é um erro ou mero acidente de software**, mas sim um cenário estritamente **adversarial** porque os dois participantes são **agentes racionais dotados de objetivos conflitantes** e operam com assimetria de informação. Ambos tomam decisões estratégicas para maximizar seu próprio ganho explorando as regras de negócio do sistema:
-* O cliente busca ativamente brechas operacionais (como devolução de itens mantendo pontos ou divisão artificial de transações) para extrair valor máximo com gasto mínimo.
+* O cliente busca ativamente brechas operacionais (como devolução de itens mantendo pontos ou esgotamento rápido de brindes em compras únicas) para extrair valor máximo com gasto mínimo.
 * O comerciante reage defensivamente, podendo alterar regras unilateralmente ou rejeitar solicitações válidas para estancar perdas financeiras.
 
 ---
@@ -34,7 +34,7 @@ A situação **não é um erro ou mero acidente de software**, mas sim um cenár
 
 | Ator | Objetivo Principal | Ações ou Capacidades | Informações Observáveis | Restrições ou Custos |
 | :--- | :--- | :--- | :--- | :--- |
-| **Cliente ($C$)** | Maximizar recompensas e cupons de sorteio desembolsando o menor valor financeiro real. | Realizar compras, solicitar fragmentação de notas no caixa, escanear QR Code, solicitar resgate de brindes no app. | Saldo de pontos, catálogo e estoque visível de brindes no app, regras ativas de pontuação. | Gasto financeiro real, tempo gasto na compra e risco de ter o brinde rejeitado pelo lojista. |
+| **Cliente ($C$)** | Maximizar resgates de brindes e benefícios desembolsando o menor valor financeiro real. | Realizar compras, escanear QR Code de pontos, acumular saldo e solicitar resgates de prêmios no app. | Saldo de pontos, catálogo e estoque visível de brindes no app, regras ativas de pontuação. | Gasto financeiro real, tempo gasto na compra e risco de ter o resgate rejeitado pelo lojista. |
 | **Lojista ($L$)** | Maximizar retenção de clientes e faturamento, minimizando o custo operacional de prêmios. | Gerar QR Code de pontuação no caixa, cadastrar campanhas e regras, aprovar ou rejeitar resgates no painel (`PUT /solicitacoes`). | Histórico de compras do cliente, solicitações de resgate pendentes, estoque físico disponível. | Custo financeiro do brinde entregue, tempo de atendimento no caixa, risco de perda de reputação. |
 
 ### 2.3 Diagrama de Contexto Simples
@@ -74,7 +74,7 @@ Modelemos a decisão central como um jogo estático de informação completa com
 ### 3.1 Espaço de Ações
 * **Jogador A (Cliente):**
   * **A₁ (Cliente Honesto / Íntegro):** Realiza compras normais e resgata brindes de forma proporcional à sua fidelidade real.
-  * **A₂ (Cliente Oportunista / Golpe da Devolução):** Explora brechas operacionais (devolução sem estorno ou divisão artificial de compras).
+  * **A₂ (Cliente Oportunista / Golpe da Devolução):** Explora brechas operacionais (devolução sem estorno ou corrida para drenar o catálogo de brindes sem fidelização).
 * **Jogador B (Lojista):**
   * **B₁ (Lojista Flexível / Baixo Atrito):** Gera pontuação ágil no caixa e aprova solicitações no aplicativo sem barreiras burocráticas.
   * **B₂ (Lojista Defensivo / Rigoroso):** Impõe checagens manuais, atrasa aprovações e rejeita solicitações suspeitas no aplicativo.
@@ -128,7 +128,7 @@ flowchart TD
 
 ### 4.3 Propriedades do Modelo Dinâmico
 1. **Quem observa quem?** O cliente observa a taxa de aprovação, prazos de entrega e estoque disponível no app. O lojista observa o saldo de pontos concedidos, a frequência de compras e a lista de solicitações pendentes no dashboard.
-2. **O que cada lado consegue mudar?** O cliente consegue mudar seu padrão de compra (fragmentar notas, concentrar compras em uma conta familiar ou explorar devoluções). O lojista consegue alterar os pontos exigidos por brinde ou rejeitar resgates no sistema.
+2. **O que cada lado consegue mudar?** O cliente consegue mudar seu padrão de compra (concentrar compras familiares em uma conta, fazer compras pontuais elevadas para resgate imediato ou explorar devoluções). O lojista consegue alterar a pontuação exigida por brinde ou rejeitar resgates no sistema.
 3. **O que dispara uma adaptação?** Perda financeira tangível percebida pelo lojista (estoque zerado sem lucro) ou quebra de expectativa percebida pelo cliente (brinde honesto rejeitado).
 4. **Qual é o custo da adaptação para cada lado?** Para o lojista: perda de tempo investigando clientes e desgaste da reputação do comércio. Para o cliente: pontos retidos sem retorno e atrito no atendimento.
 5. **Em que ponto surge a corrida armamentista?** Quando o lojista tenta se defender punindo manualmente todos os resgates, fazendo com que clientes desenvolvam técnicas mais sofisticadas (como uso de múltiplas contas familiares) para contornar os bloqueios.
@@ -160,7 +160,7 @@ flowchart LR
 | ID | Cenário de Ameaça (Formato da Norma) | Ponto de Exploração | Pressuposto ou Fraqueza | Ativo Afetado | Prob. | Imp. | Risco |
 | :---: | :--- | :--- | :--- | :--- | :---: | :---: | :---: |
 | **A1** | Um **cliente** pode realizar **devolução de mercadoria no caixa mantendo pontos** por meio do **fluxo de pós-venda desintegrado**, aproveitando a **ausência de webhook de estorno fiscal**, causando **prejuízo financeiro e esgotamento de prêmios** sobre a **margem e estoque do lojista**. | Fluxo físico de devoluções no balcão | Desconexão entre ERP físico e banco de dados do ELO | Estoque e Margem do Lojista | 3 | 3 | **9 (Crítico)** |
-| **A2** | Um **cliente** pode realizar **fragmentação artificial de compras** por meio da **emissão repetida de notas de baixo valor**, aproveitando a **regra de concessão de cupom por transação**, causando **vantagem probabilística indevida** sobre a **justiça dos sorteios da CDL**. | Função de cálculo de cupons em `compraRepository.js` | Regra ingênua de 1 cupom por compra sem piso proporcional | Justiça Distributiva de Sorteios | 3 | 2 | **6 (Médio)** |
+| **A2** | Um **cliente** pode realizar **esgotamento predatório de brindes em compra única (Hit-and-Run)** por meio de **uma única transação atípica de alto valor**, aproveitando a **ausência de requisito de recorrência de visitas no resgate**, causando **drenagem rápida do catálogo de prêmios sem gerar fidelização real** sobre o **estoque e margem do lojista**. | Regras de validação de resgate em `recompensasController.js` | Resgate liberado puramente por saldo sem histórico de frequência | Estoque de Prêmios e Retenção do Lojista | 3 | 2 | **6 (Médio)** |
 | **A3** | Um **lojista** pode realizar **rejeição arbitrária de recompensas alcançadas** por meio do endpoint `PUT /solicitacoes/processar/:id`, aproveitando o **poder discricionário unilateral sem auditoria**, causando **perda de incentivo e evasão** sobre a **confiança na moeda de fidelidade**. | Rota `processarSolicitacao` no backend | Falta de bloqueio automático de estoque e aprovação programática | Confiança no Ecossistema ELO | 2 | 3 | **6 (Médio)** |
 
 ---
@@ -180,8 +180,8 @@ flowchart LR
 > **Pergunta:** *"Depois que o sistema responder, o que o outro lado aprenderá e tentará fazer em seguida?"*
 
 **Resposta:**  
-Após o sistema implementar regras defensivas (como prazos de carência de pontos e limites de cupons), o adversário aprenderá que **ataques isolados e concentrados em uma única conta são facilmente detectáveis**.  
-Em seguida, ele tentará **migrar para a pulverização distribuída**: criará múltiplas contas associadas a CPFs de parentes e amigos (*Consolidação Familiar / Ataque Sybil de baixa intensidade*) para realizar compras fracionadas abaixo do radar algorítmico, transferindo ou concentrando os benefícios indiretamente para esgotar prêmios sem acionar as travas de segurança.
+Após o sistema implementar regras defensivas (como prazos de custódia de pontos e exigência de recorrência mínima para resgate), o adversário aprenderá que **resgates imediatos a partir de transações únicas isoladas são bloqueados**.  
+Em seguida, ele tentará **migrar para a consolidação familiar**: criará ou integrará contas de múltiplos parentes para somar pequenos saldos de compras legítimas rotineiras, ou buscará estabelecimentos parceiros menores que não fiscalizem a identidade do recebedor do brinde no momento da retirada física.
 
 ---
 
