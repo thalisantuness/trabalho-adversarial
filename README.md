@@ -5,7 +5,9 @@
 **Docentes:** Prof. Paulo Silas Severo de Souza e Prof. Silvio Ereno Quincozes  
 **Projeto:** Sistema ELO / Indiki (Fidelidade e Premiação do Comércio Local)  
 **App em Produção (Google Play):** [Cardial ELO / Indiki](https://play.google.com/store/apps/details?id=com.cardialit.indiki&hl=pt_BR)  
-**Repositório Base:** `Cardial/back-elo`, `Cardial/elo-app`, `Cardial/elo-web`
+**Repositório Base:** `Cardial/back-elo`, `Cardial/elo-app`, `Cardial/elo-web`  
+**Vídeo da Apresentação (YouTube):** [https://youtu.be/-KVf88s-INQ](https://youtu.be/-KVf88s-INQ)  
+**Apresentação em Slides (PDF):** [Apresentacao_Adversarial_ELO.pdf](./Apresentacao_Adversarial_ELO.pdf)
 
 ---
 
